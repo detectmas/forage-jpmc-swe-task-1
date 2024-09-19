@@ -8,21 +8,9 @@ class ClientTest(unittest.TestCase):
       {'top_ask': {'price': 121.68, 'size': 4}, 'timestamp': '2019-02-11 22:06:30.572453', 'top_bid': {'price': 117.87, 'size': 81}, 'id': '0.109974697771', 'stock': 'DEF'}
     ]
     """ ------------ Add the assertion below ------------ """
-    # First quote(ABC)
-    stock_abc, bid_price_abc, ask_price_abc, price_abc = getDataPoint(quotes[0])
-    self.assertEqual(stock_abc,"ABC")
-    self.assertEqual(bid_price_abc, 120.48)
-    self.assertEqual(ask_price_abc, 121.2)
-    # Check if the price of stock ABC is actually the average of the top bid and top ask as required
-    self.assertEqual(price_abc, (120.48 + 121.2) / 2) 
+    for quote in quotes:
+      self.assertEqual(getDataPoint(quote), (quote['stock'], quote['top_bid']['price'], quote['top_ask']['price'], (quote['top_bid']['price'] + quote['top_ask']['price']) / 2))
 
-    # Second quote(DEF)
-    stock_def, bid_price_def, ask_price_def, price_def = getDataPoint(quotes[1])
-    self.assertEqual(stock_def,"DEF")
-    self.assertEqual(bid_price_def, 117.87)
-    self.assertEqual(ask_price_def, 121.68)
-    # Check if the price of stock DEF is actually the average of the top bid(DEF) and top ask(DEF) as required
-    self.assertEqual(price_def, (117.87 + 121.68) / 2) 
 
   def test_getDataPoint_calculatePriceBidGreaterThanAsk(self):
     """Ensures that the function getDataPoint behaves correctly in calculating the price even when the bid price is greater than the ask price"""
@@ -31,18 +19,9 @@ class ClientTest(unittest.TestCase):
       {'top_ask': {'price': 121.68, 'size': 4}, 'timestamp': '2019-02-11 22:06:30.572453', 'top_bid': {'price': 117.87, 'size': 81}, 'id': '0.109974697771', 'stock': 'DEF'}
     ]
     """ ------------ Add the assertion below ------------ """
-    # First quote (ABC): bid price greater than ask price
-    stock_abc, bid_price_abc, ask_price_abc, price_abc = getDataPoint(quotes[0])
-    self.assertEqual(stock_abc, 'ABC')
-    self.assertEqual(bid_price_abc, 120.48)  
-    self.assertEqual(ask_price_abc, 119.2)   
-    self.assertEqual(price_abc, (120.48 + 119.2) / 2)   
-    # Second quote (DEF): normal bid-ask scenario
-    stock_def, bid_price_def, ask_price_def, price_def = getDataPoint(quotes[1])
-    self.assertEqual(stock_def, 'DEF')
-    self.assertEqual(bid_price_def, 117.87)  
-    self.assertEqual(ask_price_def, 121.68)   
-    self.assertEqual(price_def, (117.87 + 121.68) / 2)  
+    for quote in quotes:
+      self.assertEqual(getDataPoint(quote), (quote['stock'], quote['top_bid']['price'], quote['top_ask']['price'], (quote['top_bid']['price'] + quote['top_ask']['price']) / 2))
+
 
   """ ------------ Add more unit tests ------------ """
   def test_getRatio_PostiveVals(self):
